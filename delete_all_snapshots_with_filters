@@ -1,0 +1,9 @@
+import boto3
+
+client = boto3.client('ec2',region_name='us-west-1')
+billingtag = 'putyourtaghere'
+snapshots = client.describe_snapshots(Filters=[{'Name':'tag:Billing', 'Values': [billingtag]}])['Snapshots']
+
+for snapshot in snapshots:
+    id = snapshot['SnapshotId']
+    client.delete_snapshot(SnapshotId=id)
